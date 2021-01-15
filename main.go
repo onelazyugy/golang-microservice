@@ -9,6 +9,7 @@ import (
 
 func main() {
 	r := newRouter()
+	r.Use(mux.CORSMethodMiddleware(r))
 	err := http.ListenAndServe(":8181", r)
 
 	if err != nil {
@@ -18,14 +19,10 @@ func main() {
 
 func newRouter() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/health", handlers.HealthCheckHandler).Methods("GET")
-	r.HandleFunc("/bird", handlers.GetBirdHandler).Methods("GET")
-	r.HandleFunc("/bird", handlers.CreateBirdHandler).Methods("POST")
-	r.HandleFunc("/add-todo", handlers.AddTodoHandler).Methods("POST")
-	r.HandleFunc("/retrieve-todo", handlers.RetrieveTodoHandler).Methods("GET")
+	r.HandleFunc("/health", handlers.HealthCheckHandler).Methods(http.MethodGet, http.MethodOptions)         //GET
+	r.HandleFunc("/bird", handlers.GetBirdHandler).Methods(http.MethodGet, http.MethodOptions)               //GET
+	r.HandleFunc("/bird", handlers.CreateBirdHandler).Methods(http.MethodPost, http.MethodOptions)           // POST
+	r.HandleFunc("/add-todo", handlers.AddTodoHandler).Methods(http.MethodPost, http.MethodOptions)          // POST
+	r.HandleFunc("/retrieve-todo", handlers.RetrieveTodoHandler).Methods(http.MethodGet, http.MethodOptions) //GET
 	return r
-}
-
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }

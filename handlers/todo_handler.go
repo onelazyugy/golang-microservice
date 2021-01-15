@@ -3,21 +3,41 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/onelzyugy/projects/golang-microservice/services"
 	"github.com/onelzyugy/projects/golang-microservice/types"
 )
 
-// var birds []types.Bird
-
 // AddTodoHandler add todo itmes
 func AddTodoHandler(w http.ResponseWriter, r *http.Request) {
-
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var todo types.Todo
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+	if err != nil {
+		panic(err)
+	}
+	if err := r.Body.Close(); err != nil {
+		panic(err)
+	}
+	if err := json.Unmarshal(body, &todo); err != nil {
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(422) // unprocessable entity
+		if err := json.NewEncoder(w).Encode(err); err != nil {
+			panic(err)
+		}
+	}
+	fmt.Printf("todo: %v", todo)
 }
 
 // RetrieveTodoHandler retrieve all todo items
 func RetrieveTodoHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	services.AddTodoItem()
 	todos := services.GetTodoItems()
 	fmt.Println(todos)
@@ -27,11 +47,17 @@ func RetrieveTodoHandler(w http.ResponseWriter, r *http.Request) {
 
 // HealthCheckHandler health check
 func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	fmt.Fprintf(w, "Status Up!")
 }
 
 // GetBirdHandler get all birds
 func GetBirdHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	bird1 := types.Bird{Species: "bird 1", Description: "bird 1 description"}
 	bird2 := types.Bird{Species: "bird 2", Description: "bird 2 description"}
 	birds := []types.Bird{}
@@ -52,6 +78,9 @@ func GetBirdHandler(w http.ResponseWriter, r *http.Request) {
 
 // CreateBirdHandler create a bird
 func CreateBirdHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	// Create a new instance of Bird
 	bird := types.Bird{}
 
