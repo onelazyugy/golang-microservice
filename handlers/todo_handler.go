@@ -9,15 +9,19 @@ import (
 	"github.com/onelzyugy/projects/golang-microservice/types"
 )
 
-// var birds []types.Bird
-
 // AddTodoHandler add todo itmes
 func AddTodoHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
+	fmt.Println(r)
 }
 
 // RetrieveTodoHandler retrieve all todo items
 func RetrieveTodoHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	services.AddTodoItem()
 	todos := services.GetTodoItems()
 	fmt.Println(todos)
@@ -27,11 +31,17 @@ func RetrieveTodoHandler(w http.ResponseWriter, r *http.Request) {
 
 // HealthCheckHandler health check
 func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	fmt.Fprintf(w, "Status Up!")
 }
 
 // GetBirdHandler get all birds
 func GetBirdHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	bird1 := types.Bird{Species: "bird 1", Description: "bird 1 description"}
 	bird2 := types.Bird{Species: "bird 2", Description: "bird 2 description"}
 	birds := []types.Bird{}
@@ -52,6 +62,9 @@ func GetBirdHandler(w http.ResponseWriter, r *http.Request) {
 
 // CreateBirdHandler create a bird
 func CreateBirdHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	// Create a new instance of Bird
 	bird := types.Bird{}
 
