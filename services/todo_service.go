@@ -1,6 +1,6 @@
 package services
 
-import "github.com/onelzyugy/projects/learn-http/types"
+import "github.com/onelzyugy/projects/golang-microservice/types"
 
 var todos []types.Todo
 

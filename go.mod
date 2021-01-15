@@ -1,4 +1,4 @@
-module github.com/onelzyugy/projects/learn-http
+module github.com/onelzyugy/projects/golang-microservice
 
 go 1.15
 

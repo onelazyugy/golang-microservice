@@ -18,16 +18,16 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN go build -o server .
+RUN go build -o main .
 
 # Move to /dist directory as the place for resulting binary folder
 WORKDIR /dist
 
 # Copy binary from build to main folder
-RUN cp /build/server .
+RUN cp /build/main .
 
 # Export necessary port
 EXPOSE 3000
 
 # Command to run when starting the container
-CMD ["/dist/server"]
+CMD ["/dist/main"]
