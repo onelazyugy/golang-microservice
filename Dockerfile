@@ -1,29 +1,20 @@
-# Dockerfile References: https://docs.docker.com/engine/reference/builder/
+# multi stage build to reduce size
+FROM golang:1.13 as builder
+WORKDIR /workspace
+COPY go.mod go.mod
+COPY go.sum go.sum
+RUN go mod download 
 
-# Start from the latest golang base image
-FROM golang:alpine
-
-# Set the Current Working Directory inside the container
-WORKDIR /app
-
-# Copy go mod and sum files
-COPY go.mod go.sum ./
-
+COPY main.go main.go 
 COPY handlers/ handlers/
 COPY services/ services/
 COPY types/ types/  
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod download
+RUN ls -al
 
-# Copy the source from the current directory to the Working Directory inside the container
-COPY . .
-
-# Build the Go app
-RUN go build -o main .
-
-# Expose port 8080 to the outside world
-EXPOSE 8080
-
-# Command to run the executable
-CMD ["./main"]
+RUN go env 
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o golang-microservice main.go
+FROM alpine
+WORKDIR /
+COPY --from=builder /workspace/golang-microservice .
+ENTRYPOINT ["/golang-microservice"]
