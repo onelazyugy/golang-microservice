@@ -85,7 +85,7 @@ func unMarshallToBubbleTeaRequestType(r *http.Request) (types.BubbleTeaRequest, 
 }
 
 // TODO: enhance this by using interface
-// func marshallBubbleTeaResponseType(bubbleTeaResponse *types.BubbleTeaResponse) ([]byte, error) {
+// func marshall(bubbleTeaResponse *types.BubbleTeaResponse) ([]byte, error) {
 // 	bubbleTeaResponseBytes, err := json.Marshal(bubbleTeaResponse)
 // 	if err != nil {
 // 		return bubbleTeaResponseBytes, errors.New("Unable to convert response to bytes")
