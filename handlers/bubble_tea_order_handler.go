@@ -16,45 +16,54 @@ import (
 func OrderBubbleTeaHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	// var bubbleTeaResponse types.BubbleTeaResponse
+	bubbleTeaResponse := &types.BubbleTeaResponse{}
 	bubbleTeaRequest, unMarshallError := unMarshallToBubbleTeaRequestType(r)
 	if unMarshallError != nil {
-		//form error response
+		error := fmt.Errorf("Error: %v", unMarshallError)
+		fmt.Println(error)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(error.Error()))
+		return
 	}
-	//make call to service
 	serviceError := services.OrderBubbleTea(bubbleTeaRequest)
 	if serviceError != nil {
-		//form error response
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(serviceError.Error()))
+		return
 	}
-	//return proper response to api call
-	bubbleTeaResponse := types.BubbleTeaResponse{
-		Success:  true,
-		StatusCd: 200,
-		Message:  "success",
-	}
+	createBubbleTeaResponse(bubbleTeaResponse, "success", true, http.StatusOK)
 	bubbleTeaResponseBytes, marshallBubbleTeaResponseError := marshallBubbleTeaResponseType(bubbleTeaResponse)
 	if marshallBubbleTeaResponseError != nil {
-		//form error response
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(marshallBubbleTeaResponseError.Error()))
+		return
 	}
+	w.WriteHeader(http.StatusOK)
 	w.Write(bubbleTeaResponseBytes)
 }
 
-func unMarshallToBubbleTeaRequestType(r *http.Request) (types.BubbleTeaRequest, error) {
-	var bubbleTeam types.BubbleTeaRequest
-	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
-	if err != nil {
-		return bubbleTeam, fmt.Errorf("Unable to read request body: %w", err)
-	}
-	if err := r.Body.Close(); err != nil {
-		return bubbleTeam, fmt.Errorf("Unable to close request body: %w", err)
-	}
-	if err := json.Unmarshal(body, &bubbleTeam); err != nil {
-		return bubbleTeam, fmt.Errorf("Unable to convert request to BubbleTea: %w", err)
-	}
-	return bubbleTeam, nil
+func createBubbleTeaResponse(bubbleTeaResponse *types.BubbleTeaResponse, message string, success bool, statusCd int) {
+	bubbleTeaResponse.Message = message
+	bubbleTeaResponse.Success = success
+	bubbleTeaResponse.StatusCd = statusCd
 }
 
-func marshallBubbleTeaResponseType(bubbleTeaResponse types.BubbleTeaResponse) ([]byte, error) {
+func unMarshallToBubbleTeaRequestType(r *http.Request) (types.BubbleTeaRequest, error) {
+	var bubbleTea types.BubbleTeaRequest
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+	if err != nil {
+		return bubbleTea, fmt.Errorf("Unable to read request body: %w", err)
+	}
+	if err := r.Body.Close(); err != nil {
+		return bubbleTea, fmt.Errorf("Unable to close request body: %w", err)
+	}
+	if err := json.Unmarshal(body, &bubbleTea); err != nil {
+		return bubbleTea, fmt.Errorf("Unable to convert request to BubbleTea: %w", err)
+	}
+	return bubbleTea, nil
+}
+
+func marshallBubbleTeaResponseType(bubbleTeaResponse *types.BubbleTeaResponse) ([]byte, error) {
 	bubbleTeaResponseBytes, err := json.Marshal(bubbleTeaResponse)
 	if err != nil {
 		return bubbleTeaResponseBytes, errors.New("Unable to convert response to bytes")
