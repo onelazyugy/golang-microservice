@@ -1,33 +1,22 @@
-FROM golang:alpine
+# multi stage build to reduce size
+FROM golang:1.13 as builder
+WORKDIR /workspace
+COPY go.mod go.mod
+COPY go.sum go.sum
+RUN go mod download 
 
-# Set necessary environmet variables needed for our image
-ENV GO111MODULE=on \
-    CGO_ENABLED=0 \
-    GOOS=linux \
-    GOARCH=amd64
+COPY main.go main.go 
+COPY handlers/ handlers/
+COPY services/ services/
+COPY types/ types/  
 
-# Move to working directory /build
-WORKDIR /build
+RUN ls -al
 
-# Copy and download dependency using go mod
-COPY go.mod .
-# COPY go.sum .
-RUN go mod download
+RUN go env 
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o golang-microservice main.go
+FROM alpine
+WORKDIR /
+COPY --from=builder /workspace/golang-microservice .
 
-# Copy the code into the container
-COPY . .
-
-# Build the application
-RUN go build -o main .
-
-# Move to /dist directory as the place for resulting binary folder
-WORKDIR /dist
-
-# Copy binary from build to main folder
-RUN cp /build/main .
-
-# Export necessary port
 EXPOSE 3000
-
-# Command to run when starting the container
-CMD ["/dist/main"]
+ENTRYPOINT ["/golang-microservice"]

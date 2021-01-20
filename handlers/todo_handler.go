@@ -50,7 +50,7 @@ func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	fmt.Fprintf(w, "Status Up!")
+	fmt.Fprintf(w, "{\"status\": \"Status Up!\"}")
 }
 
 // GetBirdHandler get all birds
