@@ -18,3 +18,9 @@ type BubbleTeaResponse struct {
 	StatusCd int    `json:"statusCd"`
 	Message  string `json:"message"`
 }
+
+// RetrieveBubbleTeaResponse a response object to represent a retrieval request
+type RetrieveBubbleTeaResponse struct {
+	BubbleTeaResponse BubbleTeaResponse  `json:"bubbleTeaResponse"`
+	OrderedBubbleTeas []BubbleTeaRequest `json:"orderedBubbleTeas"`
+}
