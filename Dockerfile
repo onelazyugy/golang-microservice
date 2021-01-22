@@ -1,22 +1,13 @@
-# multi stage build to reduce size
-FROM golang:1.13 as builder
-WORKDIR /workspace
-COPY go.mod go.mod
-COPY go.sum go.sum
-RUN go mod download 
+FROM golang:latest as builder
+RUN mkdir /app
+WORKDIR /app
+COPY . ./
+RUN go mod download
+# RUN make test
+ARG version=dev
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags "-X main.version=$version" -o golang-microservice -v ./main.go
 
-COPY main.go main.go 
-COPY handlers/ handlers/
-COPY services/ services/
-COPY types/ types/  
-
-RUN ls -al
-
-RUN go env 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o golang-microservice main.go
 FROM alpine
-WORKDIR /
-COPY --from=builder /workspace/golang-microservice .
-
 EXPOSE 3000
-ENTRYPOINT ["/golang-microservice"]
+ENV PORT=7777
+COPY --from=builder /app/golang-microservice /
