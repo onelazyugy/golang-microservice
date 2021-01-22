@@ -11,7 +11,11 @@
 # dockerize 
 - `$ docker build . -t golang-microservice`
 - `$ docker images`
-- `$ docker run -p 3000:3000 golang-microservice`
+- `$ docker run -p {port}:{port} golang-microservice /golang-microservice`
+- if you set ```ENV PORT={port #}``` in Dockerfile, then you need to run `docker run` cmd below
+- `$ docker run -p {port #}:{port #} golang-microservice /golang-microservice`
+- if you don't set a port number for ```ENV PORT={port #}``` in Dockerfile, then you need to run `docker run` cmd below
+- `$ docker run -p 8080:8080 golang-microservice /golang-microservice` (8080 is hard coded in the main.go)
 
 # sample api
 - GET: http://localhost:8181/retrieve-todo
