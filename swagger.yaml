@@ -1,0 +1,91 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  BubbleTeaRequest:
+    description: BubbleTeaRequest represent a bubble tea drink
+    properties:
+      flavors:
+        items:
+          type: string
+        type: array
+        x-go-name: Flavors
+      name:
+        type: string
+        x-go-name: Name
+      size:
+        type: string
+        x-go-name: Size
+    type: object
+    x-go-package: github.com/onelzyugy/projects/golang-microservice/types
+  BubbleTeaResponse:
+    description: BubbleTeaResponse represents a BubbleTea request response
+    properties:
+      message:
+        type: string
+        x-go-name: Message
+      statusCd:
+        format: int64
+        type: integer
+        x-go-name: StatusCd
+      success:
+        type: boolean
+        x-go-name: Success
+    type: object
+    x-go-package: github.com/onelzyugy/projects/golang-microservice/types
+  Health:
+    description: Health health object
+    properties:
+      startTime:
+        type: string
+        x-go-name: StartTime
+      uptime:
+        type: string
+        x-go-name: UpTime
+    type: object
+    x-go-package: github.com/onelzyugy/projects/golang-microservice/types
+host: shasta-inventory-manager-dev.com
+info:
+  description: Documentation of our inventory API.
+  title: inventory manager
+  version: 1.0.0
+paths:
+  /health-check:
+    get:
+      description: health check of the app
+      operationId: check
+      responses:
+        "200":
+          $ref: '#/responses/healthResponse'
+      tags:
+      - health
+  /order:
+    post:
+      operationId: bubbleTeaRequest
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/BubbleTeaRequest'
+      responses:
+        "200":
+          $ref: '#/responses/bubbleTeaResponse'
+        "500":
+          $ref: '#/responses/bubbleTeaResponse'
+      summary: oder bubble tea drinks.
+      tags:
+      - order
+produces:
+- application/json
+responses:
+  bubbleTeaResponse:
+    description: ""
+    schema:
+      $ref: '#/definitions/BubbleTeaResponse'
+  healthResponse:
+    description: ""
+    schema:
+      $ref: '#/definitions/Health'
+schemes:
+- http
+swagger: "2.0"
