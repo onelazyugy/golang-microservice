@@ -6,9 +6,11 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/onelzyugy/projects/golang-microservice/services"
 	"github.com/onelzyugy/projects/golang-microservice/types"
+	"github.com/onelzyugy/projects/golang-microservice/util"
 )
 
 // OrderBubbleTeaHandler allows you to order bubble tea drink
@@ -92,3 +94,24 @@ func unMarshallToBubbleTeaRequestType(r *http.Request) (types.BubbleTeaRequest, 
 // 	}
 // 	return bubbleTeaResponseBytes, nil
 // }
+
+// HealthCheck return start time and uptime
+func HealthCheck(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	var healthStatus types.Health
+	startTime := time.Now().String()
+	healthStatus.StartTime = startTime
+	uptime := util.GetUpTime()
+	healthStatus.UpTime = uptime
+
+	json, err := json.Marshal(healthStatus)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(json)
+}

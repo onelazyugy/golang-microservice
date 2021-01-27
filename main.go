@@ -35,6 +35,7 @@ func newRouter() *mux.Router {
 	r.HandleFunc("/retrieve-todo", handlers.RetrieveTodoHandler).Methods(http.MethodGet, http.MethodOptions)              // GET
 	r.HandleFunc("/order", handlers.OrderBubbleTeaHandler).Methods(http.MethodPost, http.MethodOptions)                   // POST
 	r.HandleFunc("/retrieve-order", handlers.RetrieveOrderedBubbleTeaHandler).Methods(http.MethodGet, http.MethodOptions) // GET
+	r.HandleFunc("/health-check", handlers.HealthCheck).Methods(http.MethodGet, http.MethodOptions)
 	return r
 }
 
