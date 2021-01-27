@@ -29,3 +29,8 @@
 # examples
 - https://thenewstack.io/make-a-restful-json-api-go/
 - https://github.com/gorilla/mux
+
+# Swagger doc
+- `$ swagger generate spec -o ./swagger.yaml`
+- `$ swagger serve ./swagger.yaml`
+- `$ swagger serve -F swagger ./swagger.yaml`
