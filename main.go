@@ -19,16 +19,17 @@ func main() {
 	r := newRouter()
 	r.Use(mux.CORSMethodMiddleware(r))
 	log.Println("router setup completed...")
-	err := http.ListenAndServe(fmt.Sprintf(":%s", getPort()), r)
-
-	if err != nil {
-		panic(err.Error())
-	}
 
 	//
 	// Start listening for incoming chat messages
 	go handlers.HandleMessages()
 	//
+
+	err := http.ListenAndServe(fmt.Sprintf(":%s", getPort()), r)
+
+	if err != nil {
+		panic(err.Error())
+	}
 }
 
 func newRouter() *mux.Router {
