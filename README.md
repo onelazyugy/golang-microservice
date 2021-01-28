@@ -31,6 +31,10 @@
 - https://github.com/gorilla/mux
 
 # Swagger doc
+- https://goswagger.io/install.html to install swaggger cli
 - `$ swagger generate spec -o ./swagger.yaml`
 - `$ swagger serve ./swagger.yaml`
 - `$ swagger serve -F swagger ./swagger.yaml`
+- examples: 
+- https://www.ribice.ba/swagger-golang/, 
+- https://github.com/ribice/golang-swaggerui-example/blob/master/cmd/swagger/model.gohttps://github.com/ribice/golang-swaggerui-example/blob/master/cmd/swagger/model.go

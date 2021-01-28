@@ -70,8 +70,6 @@ paths:
       responses:
         "200":
           $ref: '#/responses/bubbleTeaResponse'
-        "500":
-          $ref: '#/responses/bubbleTeaResponse'
       summary: oder bubble tea drinks.
       tags:
       - order

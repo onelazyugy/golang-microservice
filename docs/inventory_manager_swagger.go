@@ -6,7 +6,6 @@ import "github.com/onelzyugy/projects/golang-microservice/types"
 // oder bubble tea drinks.
 // responses:
 //   200: bubbleTeaResponse
-//	 500: bubbleTeaResponse
 
 // swagger:parameters bubbleTeaRequest
 type bubbleTeaRequestWrapper struct {
