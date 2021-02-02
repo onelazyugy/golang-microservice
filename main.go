@@ -22,7 +22,8 @@ func main() {
 
 	//
 	// Start listening for incoming chat messages
-	go handlers.HandleMessages()
+	// this routine will wait for a message from the broadcast channel, once it receive a msg, it will send that message to all clients
+	go handlers.HandleMessages() //a new thread to run the HandleMessages function, go scheduler handle which routine to run
 	//
 
 	err := http.ListenAndServe(fmt.Sprintf(":%s", getPort()), r)

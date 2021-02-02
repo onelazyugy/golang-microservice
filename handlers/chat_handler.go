@@ -8,7 +8,7 @@ import (
 )
 
 var clients = make(map[*websocket.Conn]bool) // connected clients
-var broadcast = make(chan Message)           // broadcast channel
+var broadcast = make(chan Message)           // broadcast channel, channel is use communicate btw go routines, msg send to this channel and it will send to other routine
 // Configure the upgrader
 var upgrader = websocket.Upgrader{}
 
@@ -17,6 +17,7 @@ type Message struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 	Message  string `json:"message"`
+	DateTime string `json:"dateTime"`
 }
 
 // HandleConnections handle chat connection
@@ -51,7 +52,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 func HandleMessages() {
 	for {
 		// Grab the next message from the broadcast channel
-		msg := <-broadcast
+		msg := <-broadcast //BLOCKING CALL HERE
 		// Send it out to every client that is currently connected
 		for client := range clients {
 			err := client.WriteJSON(msg)
@@ -63,3 +64,10 @@ func HandleMessages() {
 		}
 	}
 }
+
+/*
+clients is a map of all connected clients
+broadcast is a channel that receive messages and send it out to all connected clients
+everytime there is a new message comes in, the HandleConnections function will send that message to the broadcast channel
+the go routine will run HandleMessages function and get all of the messages from the broadcast channel and send it to all of the client
+*/
