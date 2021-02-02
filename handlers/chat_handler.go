@@ -54,7 +54,7 @@ func HandleMessages() {
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
 		for client := range clients {
-			err := client.WriteJSON(msg)
+			err := client.WriteJSON(msg) //return what is send in by the user to the UI
 			if err != nil {
 				log.Printf("error: %v", err)
 				client.Close()
