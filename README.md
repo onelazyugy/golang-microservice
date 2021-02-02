@@ -38,3 +38,7 @@
 - examples: 
 - https://www.ribice.ba/swagger-golang/, 
 - https://github.com/ribice/golang-swaggerui-example/blob/master/cmd/swagger/model.gohttps://github.com/ribice/golang-swaggerui-example/blob/master/cmd/swagger/model.go
+
+# Websockt
+- https://tutorialedge.net/golang/go-websocket-tutorial/
+- https://scotch.io/bar-talk/build-a-realtime-chat-server-with-go-and-websockets

@@ -19,6 +19,12 @@ func main() {
 	r := newRouter()
 	r.Use(mux.CORSMethodMiddleware(r))
 	log.Println("router setup completed...")
+
+	//
+	// Start listening for incoming chat messages
+	go handlers.HandleMessages()
+	//
+
 	err := http.ListenAndServe(fmt.Sprintf(":%s", getPort()), r)
 
 	if err != nil {
@@ -36,6 +42,7 @@ func newRouter() *mux.Router {
 	r.HandleFunc("/order", handlers.OrderBubbleTeaHandler).Methods(http.MethodPost, http.MethodOptions)                   // POST
 	r.HandleFunc("/retrieve-order", handlers.RetrieveOrderedBubbleTeaHandler).Methods(http.MethodGet, http.MethodOptions) // GET
 	r.HandleFunc("/health-check", handlers.HealthCheck).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/connect", handlers.HandleConnections).Methods(http.MethodGet, http.MethodOptions)
 	return r
 }
 
