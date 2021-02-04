@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/shirou/gopsutil/host"
 )
 
@@ -18,4 +19,11 @@ func GetUpTime() string {
 
 	totalUptime := strconv.FormatUint(days, 10) + " days, " + strconv.FormatUint(hours, 10) + " hours, " + strconv.FormatUint(minutes, 10) + " minutes"
 	return totalUptime
+}
+
+// GetUUID with hyphen
+func GetUUID() uuid.UUID {
+	uuidWithHyphen := uuid.New()
+	fmt.Println(uuidWithHyphen)
+	return uuidWithHyphen
 }

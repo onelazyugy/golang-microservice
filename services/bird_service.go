@@ -3,7 +3,7 @@ package services
 import (
 	"fmt"
 
-	"github.com/onelzyugy/projects/golang-microservice/types"
+	"github.com/onelazyugy/golang-microservice/types"
 )
 
 var birds []types.Bird

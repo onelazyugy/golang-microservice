@@ -7,8 +7,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/onelzyugy/projects/golang-microservice/services"
-	"github.com/onelzyugy/projects/golang-microservice/types"
+	"github.com/onelazyugy/golang-microservice/services"
+	"github.com/onelazyugy/golang-microservice/types"
 )
 
 // AddTodoHandler add todo itmes

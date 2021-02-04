@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	"github.com/gorilla/mux"
-	"github.com/onelzyugy/projects/golang-microservice/handlers"
+	"github.com/onelazyugy/golang-microservice/handlers"
 )
 
 const (
@@ -22,7 +22,9 @@ func main() {
 
 	//
 	// Start listening for incoming chat messages
-	go handlers.HandleMessages()
+
+	// this routine will wait for a message from the broadcast channel, once it receive a msg, it will send that message to all clients
+	go handlers.HandleMessages() //a new thread to run the HandleMessages function, go scheduler handle which routine to run
 	//
 
 	err := http.ListenAndServe(fmt.Sprintf(":%s", getPort()), r)
@@ -42,7 +44,7 @@ func newRouter() *mux.Router {
 	r.HandleFunc("/order", handlers.OrderBubbleTeaHandler).Methods(http.MethodPost, http.MethodOptions)                   // POST
 	r.HandleFunc("/retrieve-order", handlers.RetrieveOrderedBubbleTeaHandler).Methods(http.MethodGet, http.MethodOptions) // GET
 	r.HandleFunc("/health-check", handlers.HealthCheck).Methods(http.MethodGet, http.MethodOptions)
-	r.HandleFunc("/connect", handlers.HandleConnections).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/connect/{username}", handlers.HandleConnections).Methods(http.MethodGet, http.MethodOptions)
 	return r
 }
 

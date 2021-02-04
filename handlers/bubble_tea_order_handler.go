@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/onelzyugy/projects/golang-microservice/services"
-	"github.com/onelzyugy/projects/golang-microservice/types"
-	"github.com/onelzyugy/projects/golang-microservice/util"
+	"github.com/onelazyugy/golang-microservice/services"
+	"github.com/onelazyugy/golang-microservice/types"
+	"github.com/onelazyugy/golang-microservice/util"
 )
 
 // OrderBubbleTeaHandler allows you to order bubble tea drink
