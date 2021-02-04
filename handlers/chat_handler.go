@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
+
 	"github.com/gorilla/websocket"
 )
 
@@ -11,6 +13,7 @@ var clients = make(map[*websocket.Conn]bool) // connected clients
 var broadcast = make(chan Message)           // broadcast channel, channel is use communicate btw go routines, msg send to this channel and it will send to other routine
 // Configure the upgrader
 var upgrader = websocket.Upgrader{}
+var users []string
 
 // Message our message object
 type Message struct {
@@ -20,12 +23,21 @@ type Message struct {
 	DateTime string `json:"dateTime"`
 }
 
+// MessageResponse message wrap with user
+type MessageResponse struct {
+	Message Message  `json:"message"`
+	Users   []string `json:"users"`
+}
+
 // HandleConnections handle chat connection
 func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
 	// Upgrade initial GET request to a websocket
 	ws, err := upgrader.Upgrade(w, r, nil)
+	params := mux.Vars(r)
+	username := params["username"]
+	users = append(users, username)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,8 +66,11 @@ func HandleMessages() {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast //BLOCKING CALL HERE
 		// Send it out to every client that is currently connected
+		var msgResponse MessageResponse
+		msgResponse.Message = msg
+		msgResponse.Users = users
 		for client := range clients {
-			err := client.WriteJSON(msg) //return what is send in by the user to the UI
+			err := client.WriteJSON(msgResponse) //return what is send in by the user to the UI
 			if err != nil {
 				log.Printf("error: %v", err)
 				client.Close()

@@ -1,4 +1,4 @@
-module github.com/onelzyugy/projects/golang-microservice
+module github.com/onelazyugy/golang-microservice
 
 go 1.15
 
